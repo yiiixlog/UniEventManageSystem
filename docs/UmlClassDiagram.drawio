@@ -1,0 +1,56 @@
+<mxfile host="65bd71144e">
+    <diagram id="campusEventManagementSystemUmlClassDiagram" name="campusEventManagementSystemUmlClassDiagram">
+        <mxGraphModel dx="1662" dy="707" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1050" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="user" value="&lt;b&gt;&lt;i&gt;User&lt;/i&gt;&lt;/b&gt;&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;- userId: String&lt;br/&gt;- name: String&lt;br/&gt;- password: String&lt;br/&gt;- role: String&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;+ checkPassword(password: String): boolean&lt;br/&gt;+ updateProfile(name: String): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d8e2dc;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=13;spacing=8;align=left;verticalAlign=top;autosize=1;resizeWidth=0;resizeHeight=1;" parent="1" vertex="1">
+                    <mxGeometry x="398" y="83" width="277" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="student" value="&lt;b&gt;Student&lt;/b&gt;&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;- studentNo: String&lt;br/&gt;- department: String&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;+ registerFor(event: Event): Registration&lt;br/&gt;+ cancelRegistration(registration: Registration): void&lt;br/&gt;+ viewRegistrationHistory(): List&amp;lt;Registration&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef4f0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=13;spacing=8;align=left;verticalAlign=top;autosize=1;resizeWidth=0;resizeHeight=1;" parent="1" vertex="1">
+                    <mxGeometry x="191" y="308" width="314" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="organizer" value="&lt;b&gt;Organizer&lt;/b&gt;&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;- employeeNo: String&lt;br/&gt;- organizationName: String&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;+ createEvent(event: Event): void&lt;br/&gt;+ updateEvent(event: Event): void&lt;br/&gt;+ cancelEvent(event: Event): void&lt;br/&gt;+ viewRegistrations(event: Event): List&amp;lt;Registration&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef4f0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=13;spacing=8;align=left;verticalAlign=top;autosize=1;resizeWidth=0;resizeHeight=1;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="308" width="321" height="175" as="geometry"/>
+                </mxCell>
+                <mxCell id="event" value="&lt;b&gt;Event&lt;/b&gt;&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;- eventId: int&lt;br/&gt;- title: String&lt;br/&gt;- description: String&lt;br/&gt;- location: String&lt;br/&gt;- eventType: String&lt;br/&gt;- startTime: LocalDateTime&lt;br/&gt;- endTime: LocalDateTime&lt;br/&gt;- organizerName: String&lt;br/&gt;- capacity: int&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;+ getStatus(registeredCount: int): String&lt;br/&gt;+ canRegister(registeredCount: int): boolean" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e7d8cf;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=13;spacing=8;align=left;verticalAlign=top;autosize=1;resizeWidth=0;resizeHeight=1;" parent="1" vertex="1">
+                    <mxGeometry x="614.25" y="549.5" width="272.5" height="247" as="geometry"/>
+                </mxCell>
+                <mxCell id="registration" value="&lt;b&gt;Registration&lt;/b&gt;&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;- registrationId: int&lt;br/&gt;- registeredAt: LocalDateTime&lt;br/&gt;- status: String&lt;div style=&quot;height:0;border-top:2px solid #6F8F8B;margin:6px -8px;&quot;&gt;&lt;/div&gt;+ cancel(): void&lt;br/&gt;+ isActive(): boolean" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f4f1ec;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=13;spacing=8;align=left;verticalAlign=top;autosize=1;resizeWidth=0;resizeHeight=1;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="600.5" width="187" height="145" as="geometry"/>
+                </mxCell>
+                <mxCell id="eStudentUser" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;labelBackgroundColor=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="student" target="user" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="322" y="160"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="eOrganizerUser" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;labelBackgroundColor=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="organizer" target="user" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eOrganizerEvent" value="1 → 0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=15;labelBackgroundColor=none;" parent="1" source="organizer" target="event" edge="1">
+                    <mxGeometry x="0.1026" y="32" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="eStudentRegistration" value="1 → 0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=15;labelBackgroundColor=none;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="student" target="registration" edge="1">
+                    <mxGeometry x="0.0827" y="37" relative="1" as="geometry">
+                        <mxPoint x="218" y="555" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="322" y="500"/>
+                            <mxPoint x="322" y="500"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                        <mxPoint x="322" y="460" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="eEventRegistration" value="1 → 0..*" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#6F8F8B;strokeWidth=2;fontColor=#000000;fontSize=15;labelBackgroundColor=none;" parent="1" source="event" target="registration" edge="1">
+                    <mxGeometry x="0.008" y="-17" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

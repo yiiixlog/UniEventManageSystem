@@ -1,0 +1,14 @@
+.DS_Store
+target/
+*.class
+*.log
+~$*
+
+# Generated CSV exports
+exports/*.csv
+!exports/.gitkeep
+
+# IDE files
+.idea/
+.vscode/
+*.iml

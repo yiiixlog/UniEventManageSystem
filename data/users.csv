@@ -1,0 +1,5 @@
+role,userId,name,password,studentNo,department,employeeNo,organizationName
+STUDENT,S001,王小明,1234,S001,資訊管理系,,
+STUDENT,S002,林小美,1234,S002,設計系,,
+ORGANIZER,O001,陳老師,1234,,,O001,資訊管理系
+ORGANIZER,O002,李承辦,1234,,,O002,學生事務處

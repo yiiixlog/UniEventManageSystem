@@ -1,0 +1,171 @@
+<mxfile host="65bd71144e">
+    <diagram id="campusEventManagementSystemFunctionArchitecture" name="campusEventManagementSystemFunctionArchitecture">
+        <mxGraphModel dx="1016" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="760" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="root" value="Campus Event Management System&lt;br/&gt;校園活動管理系統" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#6f8f8b;strokeColor=#526b68;strokeWidth=2;fontColor=#ffffff;fontStyle=1;fontSize=22;spacing=14;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="320" width="300" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="users" value="使用者與權限" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#d8e2dc;strokeColor=#8fa6a3;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="100" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="info" value="活動資訊" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#d8e2dc;strokeColor=#8fa6a3;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="264" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="register" value="報名參與" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#d8e2dc;strokeColor=#8fa6a3;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="455" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="notice" value="系統提示" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#d8e2dc;strokeColor=#8fa6a3;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="629" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="manage" value="活動管理" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#e7d8cf;strokeColor=#b99d90;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="862" y="154" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="admin" value="資料與匯出" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#e7d8cf;strokeColor=#b99d90;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="862" y="354" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="env" value="開發與執行環境" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#e7d8cf;strokeColor=#b99d90;strokeWidth=1.5;fontColor=#2f3437;fontStyle=1;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="862" y="559" width="170" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="student" value="學生 Student" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="50" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="organizer" value="主辦者 Organizer" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="106" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="login" value="登入 / 個人資料" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="160" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="eventSummary" value="活動列表 / 活動詳情" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="245" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="eventFilter" value="分類 / 日期 / 搜尋" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="295" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="registrationAction" value="報名 / 取消報名" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="430" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="registrationRecord" value="我的報名紀錄" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="490" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="successNotice" value="報名成功提示" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="598" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="updateNotice" value="活動異動提示" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="680" width="170" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="eventBasic" value="建立 / 編輯 / 刪除" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="110" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="capacity" value="名額管理" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="160" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="eventStatus" value="狀態自動判斷" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="210" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="userAdmin" value="用戶資料儲存" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="309" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="categoryAdmin" value="活動資訊儲存" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="359" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="reports" value="報名名單 CSV" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="409" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="java" value="Java SE 11+" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="490" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="ui" value="GUI（JavaFX）" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="540" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="oop" value="Object Oriented Design" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="590" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="storage" value="File I/O / CSV Export" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f4f1ec;strokeColor=#c9bdb2;fontColor=#3e4548;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1082" y="640" width="190" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootUsers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#8fa6a3;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="users" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootInfo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#8fa6a3;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="info" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootRegister" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#8fa6a3;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="register" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootNotice" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#8fa6a3;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="notice" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootManage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#b99d90;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="root" target="manage" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootAdmin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#b99d90;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="root" target="admin" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRootEnv" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#b99d90;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="root" target="env" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eUsersStudent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="student" target="users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eUsersOrganizer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="organizer" target="users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eUsersLogin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="login" target="users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eInfoSummary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="eventSummary" target="info" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eInfoFilter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="eventFilter" target="info" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRegisterAction" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="registrationAction" target="register" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eRegisterRecord" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="registrationRecord" target="register" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eNoticeSuccess" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="successNotice" target="notice" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eNoticeUpdate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="updateNotice" target="notice" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eManageBasic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="manage" target="eventBasic" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1072" y="101" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="eManageCapacity" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="manage" target="capacity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eManageStatus" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="manage" target="eventStatus" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eAdminUser" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="admin" target="userAdmin" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eAdminCategory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="admin" target="categoryAdmin" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eAdminReports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="admin" target="reports" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eEnvJava" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="env" target="java" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eEnvUi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="env" target="ui" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eEnvOop" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;" parent="1" source="env" target="oop" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eEnvStorage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#c9bdb2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="env" target="storage" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
