@@ -38,6 +38,20 @@ data/registrations.csv
 exports/
 ```
 
+## Design Documents
+
+### System Function Architecture
+
+![System Function Architecture](docs/FunctionArchitecture.png)
+
+### UML Class Diagram
+
+![UML Class Diagram](docs/UmlClassDiagram.png)
+
+### User Flow Diagram
+
+![User Flow Diagram](docs/UserFlowDiagram.png)
+
 ## Current Scope
 
 ```text
