@@ -1,3 +1,3 @@
 role,userId,name,password,studentNo,department,employeeNo,organizationName
 STUDENT,A11423011,蘇小玥,1234,A11423011,資訊管理系,,
-ORGANIZER,O001,張老師,1234,,,O001,資訊管理系
+ORGANIZER,001,張老師,1234,,,001,資訊管理系

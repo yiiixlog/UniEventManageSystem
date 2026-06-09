@@ -1,9 +1,11 @@
 package com.campusevent.service;
 
 import com.campusevent.model.Event;
+import com.campusevent.model.EventTypes;
 import com.campusevent.storage.FileStorage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -70,12 +72,15 @@ public class EventService {
     }
 
     public List<String> getEventTypes() {
-        return getAllEvents().stream()
+        List<String> types = new ArrayList<>(EventTypes.getTypes());
+        getAllEvents().stream()
                 .map(Event::getEventType)
                 .filter(type -> type != null && !type.trim().isEmpty())
+                .filter(type -> !types.contains(type))
                 .distinct()
                 .sorted()
-                .collect(Collectors.toList());
+                .forEach(types::add);
+        return types;
     }
 
     public void addEvent(Event event) {

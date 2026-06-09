@@ -21,6 +21,10 @@ public class Registration {
         this.status = "CANCELLED";
     }
 
+    public void markEventDeleted() {
+        this.status = "EVENT_DELETED";
+    }
+
     public boolean isActive() {
         return "REGISTERED".equals(status);
     }

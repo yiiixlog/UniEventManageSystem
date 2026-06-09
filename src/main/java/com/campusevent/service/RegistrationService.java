@@ -30,7 +30,7 @@ public class RegistrationService {
 
         int registeredCount = countActiveRegistrations(event.getEventId());
         if (!event.canRegister(registeredCount)) {
-            throw new IllegalArgumentException("活動已額滿或目前不可報名");
+            throw new IllegalArgumentException(getRegistrationUnavailableReason(event, registeredCount));
         }
 
         Registration registration = new Registration(
@@ -74,6 +74,16 @@ public class RegistrationService {
         fileStorage.saveRegistrations(registrations);
     }
 
+    public void markRegistrationsDeletedByEvent(int eventId) {
+        List<Registration> registrations = fileStorage.loadRegistrations();
+        for (Registration registration : registrations) {
+            if (registration.getEventId() == eventId && registration.isActive()) {
+                registration.markEventDeleted();
+            }
+        }
+        fileStorage.saveRegistrations(registrations);
+    }
+
     public List<Registration> getRegistrationsByStudent(String studentNo) {
         return fileStorage.loadRegistrations().stream()
                 .filter(registration -> registration.getStudentNo().equals(studentNo))
@@ -91,6 +101,27 @@ public class RegistrationService {
                 .filter(registration -> registration.getEventId() == eventId)
                 .filter(Registration::isActive)
                 .count();
+    }
+
+    public boolean hasActiveRegistration(String studentNo, int eventId) {
+        return fileStorage.loadRegistrations().stream()
+                .anyMatch(registration -> registration.getEventId() == eventId
+                        && registration.getStudentNo().equals(studentNo)
+                        && registration.isActive());
+    }
+
+    private String getRegistrationUnavailableReason(Event event, int registeredCount) {
+        LocalDateTime now = LocalDateTime.now();
+        if (event.hasCapacityLimit() && registeredCount >= event.getCapacity()) {
+            return "活動已額滿";
+        }
+        if (!now.isBefore(event.getStartTime()) && now.isBefore(event.getEndTime())) {
+            return "活動已開始，無法報名";
+        }
+        if (now.isAfter(event.getEndTime())) {
+            return "活動已結束，無法報名";
+        }
+        return "活動尚未開放報名";
     }
 
     private int nextRegistrationId(List<Registration> registrations) {

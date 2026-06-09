@@ -39,22 +39,31 @@ public class Event {
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isAfter(endTime)) {
-            return "已結束";
+            return "活動已結束";
         }
 
-        if (registeredCount >= capacity) {
+        if (hasCapacityLimit() && registeredCount >= capacity) {
             return "已額滿";
         }
 
         if (!now.isBefore(startTime) && now.isBefore(endTime)) {
-            return "進行中";
+            return "活動進行中";
         }
 
         return "未開始";
     }
 
     public boolean canRegister(int registeredCount) {
-        return LocalDateTime.now().isBefore(startTime) && registeredCount < capacity;
+        return LocalDateTime.now().isBefore(startTime)
+                && (!hasCapacityLimit() || registeredCount < capacity);
+    }
+
+    public boolean hasCapacityLimit() {
+        return capacity > 0;
+    }
+
+    public String getCapacityText() {
+        return hasCapacityLimit() ? String.valueOf(capacity) : "無限制";
     }
 
     public int getEventId() {

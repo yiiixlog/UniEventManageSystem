@@ -47,6 +47,7 @@ public class StudentView extends BorderPane {
     private final Label detailInfoLabel = new Label();
     private final Label detailDescriptionLabel = new Label();
     private final Label eventSummaryLabel = new Label();
+    private final Button registerButton = new Button("報名活動");
 
     public StudentView(AppContext context, Student student) {
         this.context = context;
@@ -61,7 +62,6 @@ public class StudentView extends BorderPane {
         VBox leftPane = new VBox(12, createToolbar(), eventSummaryLabel, eventList);
         VBox.setVgrow(eventList, Priority.ALWAYS);
 
-        Button registerButton = new Button("報名活動");
         registerButton.setMaxWidth(Double.MAX_VALUE);
         registerButton.setOnAction(event -> registerSelectedEvent());
 
@@ -94,7 +94,7 @@ public class StudentView extends BorderPane {
         searchField.setPrefWidth(260);
         searchField.setMinWidth(180);
 
-        typeFilter.setPrefWidth(130);
+        typeFilter.setPrefWidth(220);
         datePicker.setPromptText("日期");
         datePicker.setPrefWidth(150);
 
@@ -148,6 +148,8 @@ public class StudentView extends BorderPane {
                 }
 
                 int registeredCount = context.getRegistrationService().countActiveRegistrations(event.getEventId());
+                boolean registeredByStudent = context.getRegistrationService()
+                        .hasActiveRegistration(student.getStudentNo(), event.getEventId());
                 Label title = new Label(event.getTitle());
                 title.setWrapText(true);
                 title.setStyle("-fx-font-weight: bold; -fx-text-fill: #2f3437;");
@@ -159,10 +161,10 @@ public class StudentView extends BorderPane {
                 Label type = new Label(event.getEventType());
                 type.setStyle("-fx-text-fill: #536064;");
 
-                Label count = new Label("報名 " + registeredCount + " / " + event.getCapacity());
+                Label count = new Label(formatRegistrationCount(event, registeredCount));
                 count.setStyle("-fx-text-fill: #536064;");
 
-                HBox chips = new HBox(8, StatusBadge.create(event, registeredCount), type, count);
+                HBox chips = new HBox(8, StatusBadge.create(event, registeredCount, registeredByStudent), type, count);
                 chips.setFillHeight(false);
 
                 VBox cell = new VBox(5, title, meta, chips);
@@ -223,15 +225,18 @@ public class StudentView extends BorderPane {
             detailStatusRow.getChildren().clear();
             detailInfoLabel.setText("");
             detailDescriptionLabel.setText("");
+            updateRegisterButton(null, false, 0);
             return;
         }
 
         int registeredCount = context.getRegistrationService().countActiveRegistrations(event.getEventId());
+        boolean registeredByStudent = context.getRegistrationService()
+                .hasActiveRegistration(student.getStudentNo(), event.getEventId());
         detailTitleLabel.setText(event.getTitle());
         detailStatusRow.getChildren().setAll(
-                StatusBadge.create(event, registeredCount),
+                StatusBadge.create(event, registeredCount, registeredByStudent),
                 new Label(event.getEventType()),
-                new Label("報名 " + registeredCount + " / " + event.getCapacity())
+                new Label(formatRegistrationCount(event, registeredCount))
         );
         detailInfoLabel.setText(
                 "地點：" + event.getLocation()
@@ -240,12 +245,18 @@ public class StudentView extends BorderPane {
                         + " - " + event.getEndTime().format(DISPLAY_TIME)
         );
         detailDescriptionLabel.setText(event.getDescription());
+        updateRegisterButton(event, registeredByStudent, registeredCount);
     }
 
     private void registerSelectedEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
         if (event == null) {
             showMessage(Alert.AlertType.INFORMATION, "請先選擇活動");
+            return;
+        }
+
+        if (context.getRegistrationService().hasActiveRegistration(student.getStudentNo(), event.getEventId())) {
+            refreshAfterRegistrationChange(event);
             return;
         }
 
@@ -256,6 +267,47 @@ public class StudentView extends BorderPane {
         } catch (IllegalArgumentException exception) {
             showMessage(Alert.AlertType.WARNING, exception.getMessage());
         }
+    }
+
+    private void updateRegisterButton(Event event, boolean registeredByStudent, int registeredCount) {
+        if (event == null) {
+            registerButton.setText("請選擇活動");
+            registerButton.setDisable(true);
+            return;
+        }
+
+        if (registeredByStudent) {
+            registerButton.setText("已報名");
+            registerButton.setDisable(true);
+            return;
+        }
+
+        if (!event.canRegister(registeredCount)) {
+            registerButton.setText(getDisabledRegisterButtonText(event, registeredCount));
+            registerButton.setDisable(true);
+            return;
+        }
+
+        registerButton.setText("報名活動");
+        registerButton.setDisable(false);
+    }
+
+    private String getDisabledRegisterButtonText(Event event, int registeredCount) {
+        LocalDateTime now = LocalDateTime.now();
+        if (event.hasCapacityLimit() && registeredCount >= event.getCapacity()) {
+            return "已額滿";
+        }
+        if (!now.isBefore(event.getStartTime()) && now.isBefore(event.getEndTime())) {
+            return "活動進行中，無法報名";
+        }
+        if (now.isAfter(event.getEndTime())) {
+            return "活動已結束";
+        }
+        return "未開放報名";
+    }
+
+    private String formatRegistrationCount(Event event, int registeredCount) {
+        return "報名 " + registeredCount + " / " + event.getCapacityText();
     }
 
     private void refreshRegistrations() {
@@ -270,7 +322,11 @@ public class StudentView extends BorderPane {
         }
 
         if (!registration.isActive()) {
-            showMessage(Alert.AlertType.INFORMATION, "這筆報名已取消，無需重複取消");
+            if ("EVENT_DELETED".equals(registration.getStatus())) {
+                showMessage(Alert.AlertType.INFORMATION, "活動已刪除，無法取消報名");
+            } else {
+                showMessage(Alert.AlertType.INFORMATION, "這筆報名已取消，無需重複取消");
+            }
             return;
         }
 
@@ -310,6 +366,9 @@ public class StudentView extends BorderPane {
         }
         if ("CANCELLED".equals(status)) {
             return "已取消";
+        }
+        if ("EVENT_DELETED".equals(status)) {
+            return "活動已刪除";
         }
         return status;
     }

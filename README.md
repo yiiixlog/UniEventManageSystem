@@ -25,7 +25,7 @@ Account: A11423011
 Password: 1234
 
 Organizer
-Account: O001
+Account: 001
 Password: 1234
 ```
 
