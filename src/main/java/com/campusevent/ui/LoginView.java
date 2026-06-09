@@ -48,7 +48,7 @@ public class LoginView extends VBox {
             }
         });
 
-        Label demoAccounts = new Label("Demo: S001 / 1234 或 O001 / 1234");
+        Label demoAccounts = new Label("Demo: A11423011 / 1234 或 O001 / 1234");
         demoAccounts.setStyle("-fx-text-fill: #70777a;");
 
         getChildren().addAll(title, subtitle, accountField, passwordField, loginButton, demoAccounts);

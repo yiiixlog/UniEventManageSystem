@@ -6,6 +6,7 @@ import com.campusevent.model.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -13,8 +14,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -38,7 +41,11 @@ public class StudentView extends BorderPane {
     private final TextField searchField = new TextField();
     private final DatePicker datePicker = new DatePicker();
     private final ComboBox<String> typeFilter = new ComboBox<>();
-    private final Label detailLabel = new Label("請選擇活動");
+    private final VBox detailContent = new VBox(10);
+    private final Label detailTitleLabel = new Label("請選擇活動");
+    private final HBox detailStatusRow = new HBox(8);
+    private final Label detailInfoLabel = new Label();
+    private final Label detailDescriptionLabel = new Label();
     private final Label eventSummaryLabel = new Label();
 
     public StudentView(AppContext context, Student student) {
@@ -65,12 +72,13 @@ public class StudentView extends BorderPane {
         Label registrationTitle = new Label("我的報名紀錄");
         registrationTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2f3437;");
 
-        detailLabel.setWrapText(true);
-        detailLabel.setStyle("-fx-font-size: 14px; -fx-line-spacing: 4px;");
+        ScrollPane detailPane = createDetailPane();
 
-        VBox rightPane = new VBox(14, detailLabel, registerButton, registrationTitle, registrationList, cancelRegistrationButton);
+        VBox rightPane = new VBox(12, detailPane, registerButton, registrationTitle, registrationList, cancelRegistrationButton);
         rightPane.setPadding(new Insets(0, 0, 0, 24));
         rightPane.setPrefWidth(390);
+        rightPane.setMinWidth(310);
+        VBox.setVgrow(detailPane, Priority.ALWAYS);
         VBox.setVgrow(registrationList, Priority.ALWAYS);
 
         setCenter(leftPane);
@@ -81,12 +89,14 @@ public class StudentView extends BorderPane {
         refreshRegistrations();
     }
 
-    private HBox createToolbar() {
+    private FlowPane createToolbar() {
         searchField.setPromptText("搜尋活動名稱、地點、類型...");
-        HBox.setHgrow(searchField, Priority.ALWAYS);
+        searchField.setPrefWidth(260);
+        searchField.setMinWidth(180);
 
         typeFilter.setPrefWidth(130);
         datePicker.setPromptText("日期");
+        datePicker.setPrefWidth(150);
 
         Button searchButton = new Button("查詢");
         searchButton.setOnAction(event -> applyFilters());
@@ -99,9 +109,30 @@ public class StudentView extends BorderPane {
             applyFilters();
         });
 
-        HBox toolbar = new HBox(10, searchField, datePicker, typeFilter, searchButton, resetButton);
+        FlowPane toolbar = new FlowPane(Orientation.HORIZONTAL, 10, 10);
         toolbar.setPadding(new Insets(0, 0, 8, 0));
+        toolbar.getChildren().addAll(searchField, datePicker, typeFilter, searchButton, resetButton);
         return toolbar;
+    }
+
+    private ScrollPane createDetailPane() {
+        detailTitleLabel.setWrapText(true);
+        detailTitleLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #2f3437;");
+        detailInfoLabel.setWrapText(true);
+        detailInfoLabel.setStyle("-fx-font-size: 14px; -fx-line-spacing: 4px; -fx-text-fill: #3e4548;");
+        detailDescriptionLabel.setWrapText(true);
+        detailDescriptionLabel.setStyle("-fx-font-size: 14px; -fx-line-spacing: 4px; -fx-text-fill: #3e4548;");
+
+        detailContent.setPadding(new Insets(14));
+        detailContent.setStyle("-fx-background-color: #f7f8f5; -fx-background-radius: 8;");
+        detailContent.getChildren().setAll(detailTitleLabel, detailStatusRow, detailInfoLabel, detailDescriptionLabel);
+
+        ScrollPane scrollPane = new ScrollPane(detailContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setMinViewportHeight(150);
+        scrollPane.setPrefViewportHeight(260);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        return scrollPane;
     }
 
     private void configureEventList() {
@@ -112,16 +143,32 @@ public class StudentView extends BorderPane {
                 super.updateItem(event, empty);
                 if (empty || event == null) {
                     setText(null);
+                    setGraphic(null);
                     return;
                 }
 
                 int registeredCount = context.getRegistrationService().countActiveRegistrations(event.getEventId());
-                setText(event.getTitle()
-                        + "\n" + event.getStartTime().format(DISPLAY_TIME)
-                        + " / " + event.getLocation()
-                        + "\n" + event.getEventType()
-                        + " / " + event.getStatus(registeredCount)
-                        + " / " + registeredCount + " / " + event.getCapacity());
+                Label title = new Label(event.getTitle());
+                title.setWrapText(true);
+                title.setStyle("-fx-font-weight: bold; -fx-text-fill: #2f3437;");
+
+                Label meta = new Label(event.getStartTime().format(DISPLAY_TIME) + " / " + event.getLocation());
+                meta.setWrapText(true);
+                meta.setStyle("-fx-text-fill: #536064;");
+
+                Label type = new Label(event.getEventType());
+                type.setStyle("-fx-text-fill: #536064;");
+
+                Label count = new Label("報名 " + registeredCount + " / " + event.getCapacity());
+                count.setStyle("-fx-text-fill: #536064;");
+
+                HBox chips = new HBox(8, StatusBadge.create(event, registeredCount), type, count);
+                chips.setFillHeight(false);
+
+                VBox cell = new VBox(5, title, meta, chips);
+                cell.setPadding(new Insets(4, 0, 4, 0));
+                setText(null);
+                setGraphic(cell);
             }
         });
 
@@ -172,22 +219,27 @@ public class StudentView extends BorderPane {
 
     private void showEventDetail(Event event) {
         if (event == null) {
-            detailLabel.setText("請選擇活動");
+            detailTitleLabel.setText("請選擇活動");
+            detailStatusRow.getChildren().clear();
+            detailInfoLabel.setText("");
+            detailDescriptionLabel.setText("");
             return;
         }
 
         int registeredCount = context.getRegistrationService().countActiveRegistrations(event.getEventId());
-        detailLabel.setText(
-                "活動：" + event.getTitle()
-                        + "\n類型：" + event.getEventType()
-                        + "\n地點：" + event.getLocation()
+        detailTitleLabel.setText(event.getTitle());
+        detailStatusRow.getChildren().setAll(
+                StatusBadge.create(event, registeredCount),
+                new Label(event.getEventType()),
+                new Label("報名 " + registeredCount + " / " + event.getCapacity())
+        );
+        detailInfoLabel.setText(
+                "地點：" + event.getLocation()
                         + "\n主辦單位：" + event.getOrganizerName()
                         + "\n時間：" + event.getStartTime().format(DISPLAY_TIME)
                         + " - " + event.getEndTime().format(DISPLAY_TIME)
-                        + "\n名額：" + registeredCount + " / " + event.getCapacity()
-                        + "\n狀態：" + event.getStatus(registeredCount)
-                        + "\n\n" + event.getDescription()
         );
+        detailDescriptionLabel.setText(event.getDescription());
     }
 
     private void registerSelectedEvent() {

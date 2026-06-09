@@ -32,6 +32,7 @@ public class OrganizerView extends BorderPane {
     private final ObservableList<Event> events = FXCollections.observableArrayList();
     private final ListView<Event> eventList = new ListView<>(events);
     private final Label selectedEventLabel = new Label("請選擇活動，或直接填表建立新活動");
+    private final HBox selectedStatusRow = new HBox(8);
 
     private final TextField titleField = new TextField();
     private final TextField locationField = new TextField();
@@ -78,7 +79,7 @@ public class OrganizerView extends BorderPane {
         leftPane.setPrefWidth(450);
         VBox.setVgrow(eventList, Priority.ALWAYS);
 
-        VBox formPane = new VBox(14, selectedEventLabel, new Separator(), createForm());
+        VBox formPane = new VBox(14, selectedEventLabel, selectedStatusRow, new Separator(), createForm());
         formPane.setPadding(new Insets(0, 0, 0, 24));
 
         setLeft(leftPane);
@@ -95,15 +96,29 @@ public class OrganizerView extends BorderPane {
                 super.updateItem(event, empty);
                 if (empty || event == null) {
                     setText(null);
+                    setGraphic(null);
                     return;
                 }
 
                 int registeredCount = context.getRegistrationService().countActiveRegistrations(event.getEventId());
-                setText(event.getTitle()
-                        + "\n" + event.getStartTime().format(DISPLAY_TIME)
-                        + " / " + event.getLocation()
-                        + "\n" + event.getStatus(registeredCount)
-                        + " / 報名 " + registeredCount + " / " + event.getCapacity());
+                Label title = new Label(event.getTitle());
+                title.setWrapText(true);
+                title.setStyle("-fx-font-weight: bold; -fx-text-fill: #2f3437;");
+
+                Label meta = new Label(event.getStartTime().format(DISPLAY_TIME) + " / " + event.getLocation());
+                meta.setWrapText(true);
+                meta.setStyle("-fx-text-fill: #536064;");
+
+                Label count = new Label("報名 " + registeredCount + " / " + event.getCapacity());
+                count.setStyle("-fx-text-fill: #536064;");
+
+                HBox chips = new HBox(8, StatusBadge.create(event, registeredCount), count);
+                chips.setFillHeight(false);
+
+                VBox cell = new VBox(5, title, meta, chips);
+                cell.setPadding(new Insets(4, 0, 4, 0));
+                setText(null);
+                setGraphic(cell);
             }
         });
 
@@ -262,13 +277,16 @@ public class OrganizerView extends BorderPane {
     private void refreshSelectedEventLabel() {
         if (selectedEvent == null) {
             selectedEventLabel.setText("請選擇活動，或直接填表建立新活動");
+            selectedStatusRow.getChildren().clear();
             return;
         }
 
         int registeredCount = context.getRegistrationService().countActiveRegistrations(selectedEvent.getEventId());
-        selectedEventLabel.setText("目前選取：" + selectedEvent.getTitle()
-                + "\n報名人數：" + registeredCount + " / " + selectedEvent.getCapacity()
-                + "，狀態：" + selectedEvent.getStatus(registeredCount));
+        selectedEventLabel.setText("目前選取：" + selectedEvent.getTitle());
+        selectedStatusRow.getChildren().setAll(
+                StatusBadge.create(selectedEvent, registeredCount),
+                new Label("報名 " + registeredCount + " / " + selectedEvent.getCapacity())
+        );
     }
 
     private void showMessage(Alert.AlertType type, String message) {

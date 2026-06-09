@@ -21,7 +21,7 @@ mvn clean javafx:run
 
 ```text
 Student
-Account: S001
+Account: A11423011
 Password: 1234
 
 Organizer
