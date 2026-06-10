@@ -6,6 +6,7 @@ import com.campusevent.model.Student;
 import com.campusevent.storage.FileStorage;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,6 +88,15 @@ public class RegistrationService {
     public List<Registration> getRegistrationsByStudent(String studentNo) {
         return fileStorage.loadRegistrations().stream()
                 .filter(registration -> registration.getStudentNo().equals(studentNo))
+                .collect(Collectors.toList());
+    }
+
+    public List<Registration> getRecentRegistrationsByStudent(String studentNo, int daysToKeep) {
+        LocalDateTime cutoffTime = LocalDateTime.now().minusDays(daysToKeep);
+        return getRegistrationsByStudent(studentNo).stream()
+                .filter(registration -> registration.getRegisteredAt() != null)
+                .filter(registration -> !registration.getRegisteredAt().isBefore(cutoffTime))
+                .sorted(Comparator.comparing(Registration::getRegisteredAt).reversed())
                 .collect(Collectors.toList());
     }
 

@@ -21,7 +21,7 @@ public class EventService {
 
     public List<Event> getAllEvents() {
         return fileStorage.loadEvents().stream()
-                .sorted(Comparator.comparing(Event::getStartTime))
+                .sorted(Comparator.comparing(Event::getStartTime).reversed())
                 .collect(Collectors.toList());
     }
 

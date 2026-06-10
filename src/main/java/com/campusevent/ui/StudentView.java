@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -31,11 +32,15 @@ import java.util.List;
 public class StudentView extends BorderPane {
     private static final DateTimeFormatter DISPLAY_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final String ALL_TYPES = "全部類型";
+    private static final int REGISTRATION_PAGE_SIZE = 5;
+    private static final int REGISTRATION_RETENTION_DAYS = 30;
+    private static final int REGISTRATION_LIST_HEIGHT = 260;
 
     private final AppContext context;
     private final Student student;
     private final ObservableList<Event> events = FXCollections.observableArrayList();
     private final ObservableList<Registration> registrationRecords = FXCollections.observableArrayList();
+    private final List<Registration> recentRegistrationRecords = new ArrayList<>();
     private final ListView<Event> eventList = new ListView<>(events);
     private final ListView<Registration> registrationList = new ListView<>(registrationRecords);
     private final TextField searchField = new TextField();
@@ -47,7 +52,12 @@ public class StudentView extends BorderPane {
     private final Label detailInfoLabel = new Label();
     private final Label detailDescriptionLabel = new Label();
     private final Label eventSummaryLabel = new Label();
+    private final Label registrationHintLabel = new Label();
+    private final Label registrationPageLabel = new Label();
+    private final Button previousRegistrationPageButton = new Button("上一頁");
+    private final Button nextRegistrationPageButton = new Button("下一頁");
     private final Button registerButton = new Button("報名活動");
+    private int registrationPageIndex;
 
     public StudentView(AppContext context, Student student) {
         this.context = context;
@@ -71,15 +81,30 @@ public class StudentView extends BorderPane {
 
         Label registrationTitle = new Label("我的報名紀錄");
         registrationTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2f3437;");
+        registrationHintLabel.setText("* 僅顯示近 30 天報名紀錄，依報名時間由新到舊排序");
+        registrationHintLabel.setWrapText(true);
+        registrationHintLabel.setStyle("-fx-text-fill: #e11d48; -fx-font-size: 12px;");
+
+        HBox registrationPager = createRegistrationPager();
 
         ScrollPane detailPane = createDetailPane();
 
-        VBox rightPane = new VBox(12, detailPane, registerButton, registrationTitle, registrationList, cancelRegistrationButton);
+        VBox rightPane = new VBox(
+                12,
+                detailPane,
+                registerButton,
+                registrationTitle,
+                registrationHintLabel,
+                registrationList,
+                registrationPager,
+                cancelRegistrationButton
+        );
         rightPane.setPadding(new Insets(0, 0, 0, 24));
         rightPane.setPrefWidth(390);
         rightPane.setMinWidth(310);
+        registrationList.setPrefHeight(REGISTRATION_LIST_HEIGHT);
+        registrationList.setMaxHeight(REGISTRATION_LIST_HEIGHT);
         VBox.setVgrow(detailPane, Priority.ALWAYS);
-        VBox.setVgrow(registrationList, Priority.ALWAYS);
 
         setCenter(leftPane);
         setRight(rightPane);
@@ -133,6 +158,26 @@ public class StudentView extends BorderPane {
         scrollPane.setPrefViewportHeight(260);
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         return scrollPane;
+    }
+
+    private HBox createRegistrationPager() {
+        previousRegistrationPageButton.setOnAction(event -> {
+            if (registrationPageIndex > 0) {
+                registrationPageIndex--;
+                updateRegistrationPage();
+            }
+        });
+
+        nextRegistrationPageButton.setOnAction(event -> {
+            if (registrationPageIndex < getRegistrationTotalPages() - 1) {
+                registrationPageIndex++;
+                updateRegistrationPage();
+            }
+        });
+
+        HBox pager = new HBox(8, previousRegistrationPageButton, registrationPageLabel, nextRegistrationPageButton);
+        pager.setAlignment(Pos.CENTER);
+        return pager;
     }
 
     private void configureEventList() {
@@ -210,7 +255,7 @@ public class StudentView extends BorderPane {
         }
 
         events.setAll(context.getEventService().findEvents(searchField.getText(), selectedDate, selectedType));
-        eventSummaryLabel.setText("共 " + events.size() + " 筆活動，依活動時間排序");
+        eventSummaryLabel.setText("共 " + events.size() + " 筆活動，依活動時間由新到舊排序");
 
         if (!events.isEmpty()) {
             eventList.getSelectionModel().selectFirst();
@@ -263,6 +308,7 @@ public class StudentView extends BorderPane {
         try {
             context.getRegistrationService().register(student, event);
             showMessage(Alert.AlertType.INFORMATION, "報名成功");
+            registrationPageIndex = 0;
             refreshAfterRegistrationChange(event);
         } catch (IllegalArgumentException exception) {
             showMessage(Alert.AlertType.WARNING, exception.getMessage());
@@ -311,7 +357,53 @@ public class StudentView extends BorderPane {
     }
 
     private void refreshRegistrations() {
-        registrationRecords.setAll(context.getRegistrationService().getRegistrationsByStudent(student.getStudentNo()));
+        recentRegistrationRecords.clear();
+        recentRegistrationRecords.addAll(context.getRegistrationService()
+                .getRecentRegistrationsByStudent(student.getStudentNo(), REGISTRATION_RETENTION_DAYS));
+        clampRegistrationPageIndex();
+        updateRegistrationPage();
+    }
+
+    private void updateRegistrationPage() {
+        int totalRecords = recentRegistrationRecords.size();
+        int totalPages = getRegistrationTotalPages();
+
+        if (totalRecords == 0) {
+            registrationRecords.clear();
+            registrationPageLabel.setText("無紀錄");
+            previousRegistrationPageButton.setDisable(true);
+            nextRegistrationPageButton.setDisable(true);
+            return;
+        }
+
+        int fromIndex = registrationPageIndex * REGISTRATION_PAGE_SIZE;
+        int toIndex = Math.min(fromIndex + REGISTRATION_PAGE_SIZE, totalRecords);
+        registrationRecords.setAll(recentRegistrationRecords.subList(fromIndex, toIndex));
+        registrationPageLabel.setText("第 " + (registrationPageIndex + 1) + " / " + totalPages + " 頁");
+        previousRegistrationPageButton.setDisable(registrationPageIndex == 0);
+        nextRegistrationPageButton.setDisable(registrationPageIndex >= totalPages - 1);
+    }
+
+    private void clampRegistrationPageIndex() {
+        int totalPages = getRegistrationTotalPages();
+        if (totalPages == 0) {
+            registrationPageIndex = 0;
+            return;
+        }
+
+        if (registrationPageIndex >= totalPages) {
+            registrationPageIndex = totalPages - 1;
+        }
+        if (registrationPageIndex < 0) {
+            registrationPageIndex = 0;
+        }
+    }
+
+    private int getRegistrationTotalPages() {
+        if (recentRegistrationRecords.isEmpty()) {
+            return 0;
+        }
+        return (int) Math.ceil((double) recentRegistrationRecords.size() / REGISTRATION_PAGE_SIZE);
     }
 
     private void cancelSelectedRegistration() {

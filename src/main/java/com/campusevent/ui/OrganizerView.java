@@ -172,14 +172,20 @@ public class OrganizerView extends BorderPane {
 
     private void setFormEditable(boolean editable) {
         titleField.setEditable(editable);
+        titleField.setDisable(!editable);
         locationField.setEditable(editable);
+        locationField.setDisable(!editable);
         eventTypeComboBox.setDisable(!editable);
         startDatePicker.setDisable(!editable);
         startTimeField.setEditable(editable);
+        startTimeField.setDisable(!editable);
         endDatePicker.setDisable(!editable);
         endTimeField.setEditable(editable);
+        endTimeField.setDisable(!editable);
         capacityField.setEditable(editable);
+        capacityField.setDisable(!editable);
         descriptionField.setEditable(editable);
+        descriptionField.setDisable(!editable);
     }
 
     private FlowPane createToolbar() {
@@ -357,7 +363,7 @@ public class OrganizerView extends BorderPane {
         }
 
         events.setAll(context.getEventService().findEvents(searchField.getText(), selectedDate, selectedType));
-        eventSummaryLabel.setText("共 " + events.size() + " 筆活動，依活動時間排序");
+        eventSummaryLabel.setText("共 " + events.size() + " 筆活動，依活動時間由新到舊排序");
 
         if (eventToRestore == null) {
             eventList.getSelectionModel().clearSelection();

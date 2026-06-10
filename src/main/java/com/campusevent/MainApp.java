@@ -17,7 +17,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(new LoginView(context), WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setTitle("Campus Event Management System");
         stage.setMinWidth(WINDOW_WIDTH);
-        stage.setMinHeight(680);
+        stage.setMinHeight(WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
     }
