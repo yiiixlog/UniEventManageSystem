@@ -40,8 +40,20 @@ exports/               # generated locally; exported CSV files are not tracked
 
 ## Design Documents
 
-Design files are maintained locally under `docs/` and are intentionally not tracked in Git.
-This keeps the remote repository focused on runnable source code and sample CSV data.
+Full design source files are maintained locally under `docs/` and are intentionally not tracked in Git.
+The exported diagrams below are tracked only for README preview.
+
+### System Function Architecture
+
+![System Function Architecture](assets/readme/FunctionArchitecture.png)
+
+### UML Class Diagram
+
+![UML Class Diagram](assets/readme/UmlClassDiagram.png)
+
+### User Flow Diagram
+
+![User Flow Diagram](assets/readme/UserFlowDiagram.png)
 
 ## Current Scope
 
