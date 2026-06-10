@@ -4,6 +4,9 @@ target/
 *.log
 ~$*
 *.doc
+*.docx
+doc/
+docs/
 
 # Generated CSV exports
 exports/*.csv
