@@ -35,22 +35,13 @@ Password: 1234
 data/users.csv
 data/events.csv
 data/registrations.csv
-exports/
+exports/               # generated locally; exported CSV files are not tracked
 ```
 
 ## Design Documents
 
-### System Function Architecture
-
-![System Function Architecture](docs/FunctionArchitecture.png)
-
-### UML Class Diagram
-
-![UML Class Diagram](docs/UmlClassDiagram.png)
-
-### User Flow Diagram
-
-![User Flow Diagram](docs/UserFlowDiagram.png)
+Design files are maintained locally under `docs/` and are intentionally not tracked in Git.
+This keeps the remote repository focused on runnable source code and sample CSV data.
 
 ## Current Scope
 
@@ -59,7 +50,7 @@ Login
 - Student / organizer authentication by account and password
 
 Student features
-- Event list sorted by event start time
+- Event list sorted by event start time, newest first
 - Event detail view
 - Keyword search
 - Date and event type filtering
