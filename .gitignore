@@ -3,6 +3,7 @@ target/
 *.class
 *.log
 ~$*
+*.doc
 
 # Generated CSV exports
 exports/*.csv
