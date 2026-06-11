@@ -30,8 +30,6 @@ import javafx.scene.layout.VBox;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +66,7 @@ public class OrganizerView extends BorderPane {
     private final Button saveButton = new Button("儲存活動");
     private final Button cancelButton = new Button("取消");
     private final Button editButton = new Button("編輯");
+    private final Button exportButton = new Button("匯出報名名單");
     private final Button deleteButton = new Button("刪除");
 
     private Event selectedEvent;
@@ -113,6 +112,7 @@ public class OrganizerView extends BorderPane {
 
         cancelButton.setOnAction(event -> cancelFormAction());
         editButton.setOnAction(event -> enterEditMode());
+        exportButton.setOnAction(event -> exportSelectedEvent());
         deleteButton.setOnAction(event -> deleteSelectedEvent());
     }
 
@@ -163,7 +163,7 @@ public class OrganizerView extends BorderPane {
             saveButton.setText("儲存活動");
             formActions.getChildren().setAll(saveButton);
         } else if (formMode == FormMode.VIEW) {
-            formActions.getChildren().setAll(cancelButton, editButton, deleteButton);
+            formActions.getChildren().setAll(cancelButton, editButton, exportButton, deleteButton);
         } else {
             saveButton.setText("儲存變更");
             formActions.getChildren().setAll(cancelButton, saveButton);
@@ -236,7 +236,7 @@ public class OrganizerView extends BorderPane {
                 meta.setWrapText(true);
                 meta.setStyle("-fx-text-fill: #536064;");
 
-                Label count = new Label(formatRegistrationCount(event, registeredCount));
+                Label count = new Label(EventStatusFormatter.registrationCount(event, registeredCount));
                 count.setStyle("-fx-text-fill: #536064;");
 
                 HBox chips = new HBox(8, StatusBadge.create(event, registeredCount), count);
@@ -447,64 +447,20 @@ public class OrganizerView extends BorderPane {
     }
 
     private Event buildEventFromForm() {
-        String selectedType = eventTypeComboBox.getSelectionModel().getSelectedItem();
-        if (titleField.getText().trim().isEmpty()
-                || locationField.getText().trim().isEmpty()
-                || selectedType == null
-                || selectedType.trim().isEmpty()) {
-            throw new IllegalArgumentException("標題、地點與活動類型不可空白");
-        }
-
-        LocalDateTime startTime = buildDateTime(startDatePicker, startTimeField, "開始時間");
-        LocalDateTime endTime = buildDateTime(endDatePicker, endTimeField, "結束時間");
-        if (!endTime.isAfter(startTime)) {
-            throw new IllegalArgumentException("結束時間必須晚於開始時間");
-        }
-
-        int capacity = parseCapacityLimit();
-        if (capacity < 0) {
-            throw new IllegalArgumentException("報名限制人數不可小於 0");
-        }
-
-        return new Event(
+        EventFormValidator.EventFormData data = new EventFormValidator.EventFormData(
                 selectedEvent == null ? 0 : selectedEvent.getEventId(),
-                titleField.getText().trim(),
-                descriptionField.getText().trim(),
-                locationField.getText().trim(),
-                selectedType.trim(),
-                startTime,
-                endTime,
+                titleField.getText(),
+                descriptionField.getText(),
+                locationField.getText(),
+                eventTypeComboBox.getSelectionModel().getSelectedItem(),
+                startDatePicker.getValue(),
+                startTimeField.getText(),
+                endDatePicker.getValue(),
+                endTimeField.getText(),
                 organizer.getOrganizationName(),
-                capacity
+                capacityField.getText()
         );
-    }
-
-    private LocalDateTime buildDateTime(DatePicker datePicker, TextField timeField, String fieldName) {
-        LocalDate date = datePicker.getValue();
-        String timeText = timeField.getText().trim();
-        if (date == null || timeText.isEmpty()) {
-            throw new IllegalArgumentException(fieldName + "的日期與時間不可空白");
-        }
-
-        try {
-            LocalTime time = LocalTime.parse(timeText, DateTimeFormatter.ISO_LOCAL_TIME);
-            return LocalDateTime.of(date, time);
-        } catch (RuntimeException exception) {
-            throw new IllegalArgumentException(fieldName + "的時間格式請輸入 HH:mm，例如 10:00");
-        }
-    }
-
-    private int parseCapacityLimit() {
-        String value = capacityField.getText().trim();
-        if (value.isEmpty()) {
-            return 0;
-        }
-
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException exception) {
-            throw new IllegalArgumentException("報名限制人數必須是 0 或正整數");
-        }
+        return EventFormValidator.buildEvent(data);
     }
 
     private void deleteSelectedEvent() {
@@ -571,12 +527,8 @@ public class OrganizerView extends BorderPane {
         selectedEventLabel.setText("目前選取：" + selectedEvent.getTitle());
         selectedStatusRow.getChildren().setAll(
                 StatusBadge.create(selectedEvent, registeredCount),
-                new Label(formatRegistrationCount(selectedEvent, registeredCount))
+                new Label(EventStatusFormatter.registrationCount(selectedEvent, registeredCount))
         );
-    }
-
-    private String formatRegistrationCount(Event event, int registeredCount) {
-        return "報名 " + registeredCount + " / " + event.getCapacityText();
     }
 
     private void showMessage(Alert.AlertType type, String message) {

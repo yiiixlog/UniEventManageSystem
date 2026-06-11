@@ -7,9 +7,19 @@ public class Registration {
     private String studentNo;
     private int eventId;
     private LocalDateTime registeredAt;
-    private String status;
+    private RegistrationStatus status;
 
     public Registration(int registrationId, String studentNo, int eventId, LocalDateTime registeredAt, String status) {
+        this(registrationId, studentNo, eventId, registeredAt, RegistrationStatus.fromCode(status));
+    }
+
+    public Registration(
+            int registrationId,
+            String studentNo,
+            int eventId,
+            LocalDateTime registeredAt,
+            RegistrationStatus status
+    ) {
         this.registrationId = registrationId;
         this.studentNo = studentNo;
         this.eventId = eventId;
@@ -18,15 +28,15 @@ public class Registration {
     }
 
     public void cancel() {
-        this.status = "CANCELLED";
+        this.status = RegistrationStatus.CANCELLED;
     }
 
     public void markEventDeleted() {
-        this.status = "EVENT_DELETED";
+        this.status = RegistrationStatus.EVENT_DELETED;
     }
 
     public boolean isActive() {
-        return "REGISTERED".equals(status);
+        return status == RegistrationStatus.REGISTERED;
     }
 
     public int getRegistrationId() {
@@ -61,11 +71,19 @@ public class Registration {
         this.registeredAt = registeredAt;
     }
 
-    public String getStatus() {
+    public RegistrationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public String getStatusCode() {
+        return status.getCode();
+    }
+
+    public void setStatus(RegistrationStatus status) {
         this.status = status;
+    }
+
+    public void setStatus(String status) {
+        this.status = RegistrationStatus.fromCode(status);
     }
 }

@@ -57,7 +57,7 @@ public class StudentView extends BorderPane {
     private final Button previousRegistrationPageButton = new Button("上一頁");
     private final Button nextRegistrationPageButton = new Button("下一頁");
     private final Button registerButton = new Button("報名活動");
-    private int registrationPageIndex;
+    private final RegistrationPager registrationPager = new RegistrationPager(REGISTRATION_PAGE_SIZE);
 
     public StudentView(AppContext context, Student student) {
         this.context = context;
@@ -162,17 +162,13 @@ public class StudentView extends BorderPane {
 
     private HBox createRegistrationPager() {
         previousRegistrationPageButton.setOnAction(event -> {
-            if (registrationPageIndex > 0) {
-                registrationPageIndex--;
-                updateRegistrationPage();
-            }
+            registrationPager.previous();
+            updateRegistrationPage();
         });
 
         nextRegistrationPageButton.setOnAction(event -> {
-            if (registrationPageIndex < getRegistrationTotalPages() - 1) {
-                registrationPageIndex++;
-                updateRegistrationPage();
-            }
+            registrationPager.next(recentRegistrationRecords.size());
+            updateRegistrationPage();
         });
 
         HBox pager = new HBox(8, previousRegistrationPageButton, registrationPageLabel, nextRegistrationPageButton);
@@ -206,7 +202,7 @@ public class StudentView extends BorderPane {
                 Label type = new Label(event.getEventType());
                 type.setStyle("-fx-text-fill: #536064;");
 
-                Label count = new Label(formatRegistrationCount(event, registeredCount));
+                Label count = new Label(EventStatusFormatter.registrationCount(event, registeredCount));
                 count.setStyle("-fx-text-fill: #536064;");
 
                 HBox chips = new HBox(8, StatusBadge.create(event, registeredCount, registeredByStudent), type, count);
@@ -278,13 +274,11 @@ public class StudentView extends BorderPane {
         boolean registeredByStudent = context.getRegistrationService()
                 .hasActiveRegistration(student.getStudentNo(), event.getEventId());
         detailTitleLabel.setText(event.getTitle());
-        detailStatusRow.getChildren().setAll(
-                StatusBadge.create(event, registeredCount, registeredByStudent),
-                new Label(event.getEventType()),
-                new Label(formatRegistrationCount(event, registeredCount))
-        );
+        detailStatusRow.getChildren().setAll(StatusBadge.create(event, registeredCount, registeredByStudent));
         detailInfoLabel.setText(
-                "地點：" + event.getLocation()
+                "類型：" + event.getEventType()
+                        + "\n" + EventStatusFormatter.registrationCountField(event, registeredCount)
+                        + "\n地點：" + event.getLocation()
                         + "\n主辦單位：" + event.getOrganizerName()
                         + "\n時間：" + event.getStartTime().format(DISPLAY_TIME)
                         + " - " + event.getEndTime().format(DISPLAY_TIME)
@@ -308,7 +302,7 @@ public class StudentView extends BorderPane {
         try {
             context.getRegistrationService().register(student, event);
             showMessage(Alert.AlertType.INFORMATION, "報名成功");
-            registrationPageIndex = 0;
+            registrationPager.reset();
             refreshAfterRegistrationChange(event);
         } catch (IllegalArgumentException exception) {
             showMessage(Alert.AlertType.WARNING, exception.getMessage());
@@ -329,7 +323,7 @@ public class StudentView extends BorderPane {
         }
 
         if (!event.canRegister(registeredCount)) {
-            registerButton.setText(getDisabledRegisterButtonText(event, registeredCount));
+            registerButton.setText(EventStatusFormatter.disabledRegisterButtonText(event, registeredCount));
             registerButton.setDisable(true);
             return;
         }
@@ -338,72 +332,20 @@ public class StudentView extends BorderPane {
         registerButton.setDisable(false);
     }
 
-    private String getDisabledRegisterButtonText(Event event, int registeredCount) {
-        LocalDateTime now = LocalDateTime.now();
-        if (event.hasCapacityLimit() && registeredCount >= event.getCapacity()) {
-            return "已額滿";
-        }
-        if (!now.isBefore(event.getStartTime()) && now.isBefore(event.getEndTime())) {
-            return "活動進行中，無法報名";
-        }
-        if (now.isAfter(event.getEndTime())) {
-            return "活動已結束";
-        }
-        return "未開放報名";
-    }
-
-    private String formatRegistrationCount(Event event, int registeredCount) {
-        return "報名 " + registeredCount + " / " + event.getCapacityText();
-    }
-
     private void refreshRegistrations() {
         recentRegistrationRecords.clear();
         recentRegistrationRecords.addAll(context.getRegistrationService()
                 .getRecentRegistrationsByStudent(student.getStudentNo(), REGISTRATION_RETENTION_DAYS));
-        clampRegistrationPageIndex();
+        registrationPager.clamp(recentRegistrationRecords.size());
         updateRegistrationPage();
     }
 
     private void updateRegistrationPage() {
-        int totalRecords = recentRegistrationRecords.size();
-        int totalPages = getRegistrationTotalPages();
-
-        if (totalRecords == 0) {
-            registrationRecords.clear();
-            registrationPageLabel.setText("無紀錄");
-            previousRegistrationPageButton.setDisable(true);
-            nextRegistrationPageButton.setDisable(true);
-            return;
-        }
-
-        int fromIndex = registrationPageIndex * REGISTRATION_PAGE_SIZE;
-        int toIndex = Math.min(fromIndex + REGISTRATION_PAGE_SIZE, totalRecords);
-        registrationRecords.setAll(recentRegistrationRecords.subList(fromIndex, toIndex));
-        registrationPageLabel.setText("第 " + (registrationPageIndex + 1) + " / " + totalPages + " 頁");
-        previousRegistrationPageButton.setDisable(registrationPageIndex == 0);
-        nextRegistrationPageButton.setDisable(registrationPageIndex >= totalPages - 1);
-    }
-
-    private void clampRegistrationPageIndex() {
-        int totalPages = getRegistrationTotalPages();
-        if (totalPages == 0) {
-            registrationPageIndex = 0;
-            return;
-        }
-
-        if (registrationPageIndex >= totalPages) {
-            registrationPageIndex = totalPages - 1;
-        }
-        if (registrationPageIndex < 0) {
-            registrationPageIndex = 0;
-        }
-    }
-
-    private int getRegistrationTotalPages() {
-        if (recentRegistrationRecords.isEmpty()) {
-            return 0;
-        }
-        return (int) Math.ceil((double) recentRegistrationRecords.size() / REGISTRATION_PAGE_SIZE);
+        RegistrationPager.Page page = registrationPager.getPage(recentRegistrationRecords);
+        registrationRecords.setAll(page.getRecords());
+        registrationPageLabel.setText(page.getLabel());
+        previousRegistrationPageButton.setDisable(page.isPreviousDisabled());
+        nextRegistrationPageButton.setDisable(page.isNextDisabled());
     }
 
     private void cancelSelectedRegistration() {
@@ -414,11 +356,8 @@ public class StudentView extends BorderPane {
         }
 
         if (!registration.isActive()) {
-            if ("EVENT_DELETED".equals(registration.getStatus())) {
-                showMessage(Alert.AlertType.INFORMATION, "活動已刪除，無法取消報名");
-            } else {
-                showMessage(Alert.AlertType.INFORMATION, "這筆報名已取消，無需重複取消");
-            }
+            showMessage(Alert.AlertType.INFORMATION,
+                    RegistrationStatusFormatter.inactiveRegistrationMessage(registration));
             return;
         }
 
@@ -448,21 +387,8 @@ public class StudentView extends BorderPane {
                 .orElse("活動已刪除");
 
         return eventTitle
-                + "\n狀態：" + displayStatus(registration.getStatus())
+                + "\n狀態：" + RegistrationStatusFormatter.displayStatus(registration.getStatus())
                 + " / 報名時間：" + formatDateTime(registration.getRegisteredAt());
-    }
-
-    private String displayStatus(String status) {
-        if ("REGISTERED".equals(status)) {
-            return "已報名";
-        }
-        if ("CANCELLED".equals(status)) {
-            return "已取消";
-        }
-        if ("EVENT_DELETED".equals(status)) {
-            return "活動已刪除";
-        }
-        return status;
     }
 
     private String formatDateTime(LocalDateTime dateTime) {

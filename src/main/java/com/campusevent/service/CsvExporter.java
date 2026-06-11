@@ -56,7 +56,7 @@ public class CsvExporter {
                     registration.getRegisteredAt() == null
                             ? ""
                             : registration.getRegisteredAt().format(DATE_TIME_FORMATTER),
-                    registration.getStatus()
+                    registration.getStatusCode()
             )));
         }
 

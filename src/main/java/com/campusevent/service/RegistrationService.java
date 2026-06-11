@@ -2,6 +2,7 @@ package com.campusevent.service;
 
 import com.campusevent.model.Event;
 import com.campusevent.model.Registration;
+import com.campusevent.model.RegistrationStatus;
 import com.campusevent.model.Student;
 import com.campusevent.storage.FileStorage;
 
@@ -39,7 +40,7 @@ public class RegistrationService {
                 student.getStudentNo(),
                 event.getEventId(),
                 LocalDateTime.now(),
-                "REGISTERED"
+                RegistrationStatus.REGISTERED
         );
         registrations.add(registration);
         fileStorage.saveRegistrations(registrations);

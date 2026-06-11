@@ -130,7 +130,7 @@ public class FileStorage {
                     registration.getStudentNo(),
                     String.valueOf(registration.getEventId()),
                     formatDateTime(registration.getRegisteredAt()),
-                    registration.getStatus()
+                    registration.getStatusCode()
             )));
         }
 

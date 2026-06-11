@@ -11,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class AppContext {
+    public static final int WINDOW_WIDTH = 1220;
+    public static final int WINDOW_HEIGHT = 820;
+
     private final Stage stage;
     private final FileStorage fileStorage;
     private final AuthService authService;
@@ -32,7 +35,7 @@ public class AppContext {
     public void navigateTo(Parent parent) {
         Scene scene = stage.getScene();
         if (scene == null) {
-            stage.setScene(new Scene(parent, 1000, 680));
+            stage.setScene(new Scene(parent, WINDOW_WIDTH, WINDOW_HEIGHT));
         } else {
             scene.setRoot(parent);
         }

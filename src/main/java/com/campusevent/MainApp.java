@@ -8,16 +8,13 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
-    private static final int WINDOW_WIDTH = 1220;
-    private static final int WINDOW_HEIGHT = 720;
-
     @Override
     public void start(Stage stage) {
         AppContext context = new AppContext(stage);
-        Scene scene = new Scene(new LoginView(context), WINDOW_WIDTH, WINDOW_HEIGHT);
+        Scene scene = new Scene(new LoginView(context), AppContext.WINDOW_WIDTH, AppContext.WINDOW_HEIGHT);
         stage.setTitle("Campus Event Management System");
-        stage.setMinWidth(WINDOW_WIDTH);
-        stage.setMinHeight(WINDOW_HEIGHT);
+        stage.setMinWidth(AppContext.WINDOW_WIDTH);
+        stage.setMinHeight(AppContext.WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
     }

@@ -13,7 +13,7 @@ public class Student extends User {
     }
 
     public Registration registerFor(Event event) {
-        return new Registration(0, studentNo, event.getEventId(), null, "REGISTERED");
+        return new Registration(0, studentNo, event.getEventId(), null, RegistrationStatus.REGISTERED);
     }
 
     public void cancelRegistration(Registration registration) {
